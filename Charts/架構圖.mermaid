@@ -1,0 +1,98 @@
+flowchart LR
+    %% ===== User =====
+    User[使用者]
+
+    %% ===== Frontend (LIFF / LINE) =====
+    subgraph Frontend[Frontend（LIFF / LINE）]
+        Login[Login Component]
+        UserProfile[User Profile Component]
+        HospitalUI[Hospital Service Component]
+        HealthUI[Health Service Component]
+
+        LineClient[LINE Message Client]
+    end
+
+    %% ===== BFF =====
+    subgraph BFF[Backend for Frontend]
+        WebhookCtrl[Webhook Controller]
+        WebhookAdapter[Webhook Event Adapter]
+
+        LiffReqAdapter[LIFF Request Adapter]
+        LiffSessionValidator[LIFF Session Validator]
+        RequestRouter[Request Router]
+
+        LiffRespAdapter[LIFF Response Adapter]
+        FlexAdapter[Flex Message Adapter]
+        RichMenuAdapter[Rich Menu Adapter]
+        ResponseFormatter[Response Formatter]
+    end
+
+    %% ===== Core Backend =====
+    subgraph CoreBackend[Core Backend]
+        ConversationSvc[Conversation Service]
+        AIResponseSvc[AI Response Service]
+        FactCheckSvc[Fact Checking Service]
+
+        HealthSvc[Health Domain Service]
+        HospitalSvc[Hospital Resource Service]
+
+        UserMgmtSvc[User Management Service]
+        UserPrefSvc[User Preference Service]
+
+        TTSSvc[Text to Speech Service]
+        ASRSvc[Speech to Text Service]
+
+        VideoSvc[Video Analysis Service]
+        DocSvc[Document Processing Service]
+        MediaSvc[Media Processing Service]
+
+        RichMenuSvc[Rich Menu Management Service]
+    end
+
+    %% ===== Flow =====
+    User --> Frontend
+
+    Login --> LiffReqAdapter
+    UserProfile --> LiffReqAdapter
+    HospitalUI --> LiffReqAdapter
+    HealthUI --> LiffReqAdapter
+
+    LiffReqAdapter --> LiffSessionValidator
+    LiffSessionValidator --> RequestRouter
+
+    WebhookCtrl --> WebhookAdapter
+    WebhookAdapter --> RequestRouter
+
+    RequestRouter --> UserMgmtSvc
+    RequestRouter --> UserPrefSvc
+    RequestRouter --> HealthSvc
+    RequestRouter --> HospitalSvc
+    RequestRouter --> ConversationSvc
+    RequestRouter --> VideoSvc
+    RequestRouter --> DocSvc
+    RequestRouter --> ASRSvc
+    RequestRouter --> RichMenuSvc
+
+    ConversationSvc --> AIResponseSvc
+    ConversationSvc --> FactCheckSvc
+    AIResponseSvc --> TTSSvc
+
+    VideoSvc --> MediaSvc
+    DocSvc --> MediaSvc
+
+    UserMgmtSvc --> LiffRespAdapter
+    UserPrefSvc --> LiffRespAdapter
+    HealthSvc --> LiffRespAdapter
+    HospitalSvc --> LiffRespAdapter
+    RichMenuSvc --> LiffRespAdapter
+
+    LiffRespAdapter --> ResponseFormatter
+    ResponseFormatter --> Frontend
+
+    ConversationSvc --> FlexAdapter
+    VideoSvc --> FlexAdapter
+    DocSvc --> FlexAdapter
+    ASRSvc --> FlexAdapter
+
+    FlexAdapter --> LineClient
+    RichMenuAdapter --> LineClient
