@@ -1,0 +1,25 @@
+
+flowchart TD
+	start([LINE 訊息/LIFF 啟動])
+	classify{判斷需求類型}
+	medical{尋求醫療協助?}
+	advice[提供非診斷建議與就醫提醒]
+	searchNearby{是否需要搜尋附近資源}
+	gps{使用者是否同意開啟 GPS}
+	gpsFail[提示開啟定位或改用關鍵字搜尋]
+	fetchHospitals[依定位查詢診所/醫院/掛號資訊]
+	health[健康問題或資訊查詢]
+	factCheck[事實查核/可信度評估]
+	unverifiable[標示 AI 生成與不保證正確]
+	respond["格式化回應 (文字 + Flex + TTS)"]
+
+	start --> classify
+	classify --> medical
+	medical -- 是 --> advice --> searchNearby
+	medical -- 否 --> health --> factCheck
+	searchNearby -- 是 --> gps
+	gps -- 是 --> fetchHospitals --> respond
+	gps -- 否 --> gpsFail --> respond
+	searchNearby -- 否 --> respond
+	factCheck -- 可驗證 --> respond
+	factCheck -- 不可驗證 --> unverifiable --> respond

@@ -1,0 +1,14 @@
+flowchart TD
+	vStart([LINE 轉傳影片])
+	format{影音格式可讀取?}
+	reject[回覆不支援格式，請重新上傳]
+	transcribe[媒體處理：語音轉文字/逐字稿]
+	checkVideo[查核逐字稿與影片摘要]
+	labelAI[標示為 AI 推測並提示查證來源]
+	vRespond["回傳查核結果 (可信度 + 摘要 + 佐證連結 + TTS)"]
+
+	vStart --> format
+	format -- 否 --> reject
+	format -- 是 --> transcribe --> checkVideo
+	checkVideo -- 可驗證 --> vRespond
+	checkVideo -- 不可驗證/有疑慮 --> labelAI --> vRespond
