@@ -4,7 +4,6 @@ workspace "CARE" "CARE-Clinical Assistance & Resource Engine" {
     model {
         // ==================== People ====================
         user = person "使用者" "使用CARE系統尋求醫療及健康相關協助"
-        admin = person "管理員" "管理使用者回報問題、系統設定等"
         
         // ==================== CARE Software System ====================
         care = softwareSystem "CARE" "CARE-Clinical Assistance & Resource Engine" {
@@ -15,7 +14,6 @@ workspace "CARE" "CARE-Clinical Assistance & Resource Engine" {
                 userInfoComponent = component "User Profile Component" "管理使用者個人資料與偏好設定"
                 hospitalServiceComponent = component "Hospital Service Component" "提供醫療相關服務功能，如:掛號輔助、醫院資訊查詢等"
                 healthServiceComponent = component "Health Service Component" "提供健康相關服務功能，如:健康資訊查詢、健康提醒等"
-                adminComponent = component "Admin Dashboard Component" "管理員功能介面"
             }
             
             // ---------- Backend for Frontend ----------
@@ -35,7 +33,7 @@ workspace "CARE" "CARE-Clinical Assistance & Resource Engine" {
                 liffResponseAdapter = component "LIFF Response Adapter" "將Core Backend回應轉換為LIFF前端格式"
                 
                 // 通用轉換層
-                requestRouter = component "Request Router" "路由請求到對應的Core Backend服務"
+                requestRouter = component "Request Router" "依 API path / event type 做靜態轉發，不包含任何業務判斷"
                 responseFormatter = component "Response Formatter" "格式化回應給不同的客戶端"
             }
             
@@ -60,7 +58,6 @@ workspace "CARE" "CARE-Clinical Assistance & Resource Engine" {
                 
                 // 系統管理
                 richMenuManagementService = component "Rich Menu Management Service" "Rich Menu內容與規則管理"
-                adminService = component "Admin Service" "管理員功能(問題處理、系統設定等)"
                 
                 // 對話管理
                 conversationService = component "Conversation Service" "對話狀態管理與上下文處理"
@@ -113,7 +110,6 @@ workspace "CARE" "CARE-Clinical Assistance & Resource Engine" {
         // ==================== Context Level Relationships ====================
         user -> linePlatform "透過LINE App與系統互動(傳送訊息、開啟LIFF)"
         user -> care.liff "使用醫療及健康相關功能"
-        admin -> care.liff "管理系統設定、處理回報問題"
         
         linePlatform -> care.bff "發送Webhook事件(訊息、追蹤、取消追蹤等)"
         care.bff -> linePlatform "發送訊息、更新Rich Menu等"
@@ -129,7 +125,7 @@ workspace "CARE" "CARE-Clinical Assistance & Resource Engine" {
         
         // Core Backend to Database & Cache
         care.cb -> care.db "讀寫資料" "MongoDB Protocol"
-        care.bff -> care.cache "讀寫會話狀態" "Redis Protocol"
+        care.bff -> care.cache "僅儲存技術性會話資料（token / nonce / retry），不含業務狀態" "Redis Protocol"
         care.cb -> care.cache "快取查詢結果" "Redis Protocol"
         
         // Core Backend to External Systems
@@ -143,7 +139,6 @@ workspace "CARE" "CARE-Clinical Assistance & Resource Engine" {
         care.liff.userInfoComponent -> care.bff.liffRequestAdapter "獲取/更新使用者資料"
         care.liff.hospitalServiceComponent -> care.bff.liffRequestAdapter "醫療服務請求"
         care.liff.healthServiceComponent -> care.bff.liffRequestAdapter "健康服務請求"
-        care.liff.adminComponent -> care.bff.liffRequestAdapter "管理功能請求(包含Rich Menu設定)"
         
         // --- BFF LIFF Flow (只做轉換，不處理邏輯) ---
         care.bff.liffRequestAdapter -> care.bff.liffSessionValidator "驗證LIFF Access Token"
@@ -156,7 +151,6 @@ workspace "CARE" "CARE-Clinical Assistance & Resource Engine" {
         care.bff.requestRouter -> care.cb.hospitalResourceService "醫療服務請求"
         care.bff.requestRouter -> care.cb.healthDomainService "健康服務請求"
         care.bff.requestRouter -> care.cb.richMenuManagementService "Rich Menu管理請求"
-        care.bff.requestRouter -> care.cb.adminService "管理員功能請求"
         
         // --- BFF Response Flow ---
         care.cb.userManagementService -> care.bff.liffResponseAdapter "返回使用者資料"
@@ -164,7 +158,6 @@ workspace "CARE" "CARE-Clinical Assistance & Resource Engine" {
         care.cb.hospitalResourceService -> care.bff.liffResponseAdapter "返回醫療資訊"
         care.cb.healthDomainService -> care.bff.liffResponseAdapter "返回健康資訊"
         care.cb.richMenuManagementService -> care.bff.liffResponseAdapter "返回Rich Menu設定"
-        care.cb.adminService -> care.bff.liffResponseAdapter "返回管理結果"
         care.bff.liffResponseAdapter -> care.bff.responseFormatter "格式化回應"
         
         // --- BFF Webhook Flow (只做事件轉換) ---
@@ -212,10 +205,8 @@ workspace "CARE" "CARE-Clinical Assistance & Resource Engine" {
         care.cb.videoAnalysisService -> care.cb.mediaProcessingService "處理影片"
         care.cb.documentProcessingService -> care.cb.mediaProcessingService "處理文件"
         
-        // --- Core Backend: Admin & Rich Menu ---
-        care.cb.adminService -> care.cb.richMenuManagementService "管理員設定Rich Menu"
+        // --- Core Backend: Rich Menu ---
         care.cb.richMenuManagementService -> care.db "存取Rich Menu設定"
-        care.cb.adminService -> care.db "管理問題回報、系統設定"
         
         // --- Core Backend to Database ---
         care.cb.userManagementService -> care.db "CRUD使用者資料"
@@ -256,96 +247,192 @@ workspace "CARE" "CARE-Clinical Assistance & Resource Engine" {
 
     views {
         systemContext care "ContextDiagram" {
-            include *
+            include user
+            include care
+            include linePlatform
+            include taiwaneseAI
+            include mcpServer
+
             autoLayout lr
-            title "[Level 1] CARE - Context Diagram"
-            description "系統環境圖：展示CARE系統與使用者、外部系統的互動關係"
+            title "[L1] CARE – System Context"
+            description "CARE 系統與使用者及外部平台（LINE、AI、MCP）的互動關係"
         }
 
-        container care "ContainerDiagram" {
-            include *
+        container care "ContainerDiagram-Overview" {
+            include user
+            include care.liff
+            include care.bff
+            include care.cb
+            include care.db
+            include care.cache
+            include linePlatform
+            include taiwaneseAI
+            include mcpServer
+
             autoLayout lr
-            title "[Level 2] CARE - Container Diagram"
-            description "容器圖：展示CARE系統內部的主要容器及其互動關係"
+            title "[L2] CARE – Container Overview"
+            description "展示 CARE 的主要容器與責任分工（前端 / BFF / 核心後端）"
         }
 
-        component care.liff "LIFFComponentDiagram" {
-            include *
+        container care "ContainerDiagram-External" {
+            include care.bff
+            include care.cb
+            include taiwaneseAI
+            include mcpServer
+            include linePlatform
+
             autoLayout lr
-            title "[Level 3] CARE - LIFF Component Diagram"
-            description "LIFF元件圖：展示LIFF前端應用的內部元件"
+            title "[L2] CARE – External Integrations"
+            description "CARE 與 LINE、台語 AI、MCP Workflow 的整合關係"
         }
 
-        component care.bff "BFFComponentDiagram" {
-            include *
+        component care.bff "BFFComponentDiagram-CoreFlow" {
+            include care.bff.webhookController
+            include care.bff.webhookEventAdapter
+            include care.bff.liffRequestAdapter
+            include care.bff.liffSessionValidator
+            include care.bff.requestRouter
+            include care.bff.liffResponseAdapter
+            include care.bff.flexMessageAdapter
+            include care.bff.lineMessageClient
+
             autoLayout lr
-            title "[Level 3] CARE - Backend for Frontend Component Diagram"
-            description "BFF元件圖：展示BFF層的內部元件及其處理流程"
+            title "[L3] BFF – Message & Request Flow"
+            description "BFF 僅負責請求轉換與轉送，不包含任何商業邏輯"
         }
 
-        component care.cb "CoreBackendComponentDiagram" {
-            include *
+        component care.cb "CoreBackend-ConversationAI" {
+            include care.cb.conversationService
+            include care.cb.aiResponseService
+            include care.cb.factCheckingService
+            include care.cb.userPreferenceService
+            include care.cb.ttsService
+            include care.cb.asrService
+            include care.cache
+            include care.db
+
             autoLayout lr
-            title "[Level 3] CARE - Core Backend Component Diagram"
-            description "Core Backend元件圖：展示核心後端的業務邏輯元件"
+            title "[L3] Core Backend – Conversation & AI"
+            description "核心後端中對話管理與 AI 回應的處理流程"
         }
 
-        component taiwaneseAI.modelApi "TaiwaneseAIModelAPIComponentDiagram" {
-            include *
+        component care.cb "CoreBackend-HealthHospital" {
+            include care.cb.healthDomainService
+            include care.cb.hospitalResourceService
+            include care.cb.userManagementService
+            include care.cb.userPreferenceService
+            include care.db
+
             autoLayout lr
-            title "[Level 3] 台語 AI 模型服務系統 - Component Diagram"
-            description "台語AI模型API元件圖：展示台語AI服務的內部元件"
+            title "[L3] Core Backend – Health & Hospital Domain"
+            description "健康與醫療資源相關的業務邏輯服務"
         }
 
-        component mcpServer.mcpApi "MCPAPIComponentDiagram" {
-            include *
-            autoLayout lr
-            title "[Level 3] MCP Server - Component Diagram"
-            description "MCP Server元件圖：展示MCP工作流程服務的內部元件"
-        }
 
         styles {
-            element "Element" {
-                color #ffffff
-                background #1168bd
-                stroke #0773af
-                strokeWidth 7
-                shape roundedbox
-                fontSize 24
-            }
+            /* =========================
+               People
+               ========================= */
             element "Person" {
                 shape person
-                background #08427b
-                fontSize 28
+                background #2c3e50
+                color #ffffff
+                fontSize 38
             }
+        
+            /* =========================
+               Software Systems
+               ========================= */
             element "Software System" {
-                background #1168bd
-                fontSize 26
+                shape roundedbox
+                background #34495e
+                color #ffffff
+                fontSize 36
             }
+        
+            element "External System" {
+                background #7f8c8d
+                color #ffffff
+                opacity 75
+                fontSize 34
+            }
+        
+            /* =========================
+               Containers
+               ========================= */
             element "Container" {
-                background #438dd5
-                fontSize 24
+                shape roundedbox
+                background #5dade2
+                color #ffffff
+                fontSize 34
             }
-            element "Component" {
-                background #85bbf0
-                fontSize 22
-            }
+        
             element "Database" {
                 shape cylinder
-                background #438dd5
+                background #48c9b0
+                color #000000
+                fontSize 32
             }
+        
             element "Cache" {
                 shape cylinder
-                background #f39c12
+                background #f5b041
+                color #000000
+                fontSize 32
             }
-            element "External System" {
-                background #999999
+        
+            /* =========================
+               Components
+               ========================= */
+            element "Component" {
+                shape roundedbox
+                background #ecf0f1
+                color #2c3e50
+                stroke #95a5a6
+                strokeWidth 2
+                fontSize 32
             }
+        
+            /* =========================
+               Emphasis / Key Roles
+               ========================= */
+        
+            /* 核心商業邏輯（Core Backend 內部） */
+            element "Core" {
+                background #3498db
+                color #ffffff
+                fontSize 34
+            }
+        
+            /* Adapter / Translator（BFF 專用） */
+            element "Adapter" {
+                background #d6eaf8
+                color #1b4f72
+                stroke #5dade2
+                strokeWidth 2
+                fontSize 32
+            }
+        
+            /* =========================
+               Relationships
+               ========================= */
             relationship "Relationship" {
-                thickness 4
-                fontSize 20
-                color #707070
+                color #ffffff
+                thickness 2
+                fontSize 30
             }
+        
+            relationship "Sync" {
+                dashed false
+                thickness 2
+            }
+        
+            relationship "Async" {
+                dashed true
+                thickness 2
+            }
+
         }
+
     }
 }
