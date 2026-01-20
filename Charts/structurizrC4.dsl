@@ -1,389 +1,467 @@
-workspace "CARE" "CARE-Clinical Assistance & Resource Engine" {
+workspace "CARE" "CARE - Clinical Assistance & Resource Engine" {
     !identifiers hierarchical
-
+    
     model {
-        // ==================== People ====================
-        user = person "使用者" "使用CARE系統尋求醫療及健康相關協助"
+        // ==================== Actors ====================
+        user = person "使用者" "透過 LINE 尋求醫療、健康協助"
         
-        // ==================== CARE Software System ====================
-        care = softwareSystem "CARE" "CARE-Clinical Assistance & Resource Engine" {
-            
-            // ---------- LIFF Frontend ----------
-            liff = container "LIFF App" "LINE Front-end Framework application" "React/Vue.js" {
-                loginComponent = component "Login Component" "使用LINE帳號登入系統"
-                userInfoComponent = component "User Profile Component" "管理使用者個人資料與偏好設定"
-                hospitalServiceComponent = component "Hospital Service Component" "提供醫療相關服務功能，如:掛號輔助、醫院資訊查詢等"
-                healthServiceComponent = component "Health Service Component" "提供健康相關服務功能，如:健康資訊查詢、健康提醒等"
+        // ==================== Core System ====================
+        care = softwareSystem "CARE" "Clinical Assistance & Resource Engine" {
+            // --- Presentation Layer ---
+            liff = container "LIFF App" "LINE 前端應用" "React / Vue.js" {
+                login = component "登入元件" "使用 LINE 帳號登入系統"
+                profile = component "個人資料元件" "管理使用者個人資料與偏好設定"
+                hospitalSvc = component "醫療服務元件" "提供醫療相關服務，如:掛號輔助、醫院資訊查詢等"
+                healthSvc = component "健康服務元件" "提供健康相關服務，如:健康資訊查詢、健康提醒等"
             }
             
-            // ---------- Backend for Frontend ----------
-            bff = container "Backend for Frontend" "處理前端請求與LINE Webhook事件的轉換層(不處理商業邏輯)" "Node.js/Express" {
-                // LINE Webhook 相關
-                webhookController = component "Webhook Controller" "接收LINE Webhook事件並轉發給Core Backend"
-                webhookEventAdapter = component "Webhook Event Adapter" "將LINE事件格式轉換為內部格式"
-                
-                // LINE Message 相關
-                flexMessageAdapter = component "Flex Message Adapter" "將Core Backend回應轉換為LINE Flex Message格式"
-                richMenuAdapter = component "Rich Menu Adapter" "將Rich Menu設定轉換為LINE API格式並同步"
-                lineMessageClient = component "LINE Message Client" "封裝LINE Messaging API呼叫"
-                
-                // LIFF 相關
-                liffSessionValidator = component "LIFF Session Validator" "驗證LIFF Access Token"
-                liffRequestAdapter = component "LIFF Request Adapter" "將LIFF請求轉換為Core Backend API格式"
-                liffResponseAdapter = component "LIFF Response Adapter" "將Core Backend回應轉換為LIFF前端格式"
-                
-                // 通用轉換層
-                requestRouter = component "Request Router" "依 API path / event type 做靜態轉發，不包含任何業務判斷"
-                responseFormatter = component "Response Formatter" "格式化回應給不同的客戶端"
+            // --- API Gateway / BFF ---
+            bff = container "BFF" "Backend For Frontend + LINE Webhook 轉接層 (不處理商業邏輯)" "Node.js / Express" {
+                // --- Webhook 相關 ---
+                webhookCtrl = component "Webhook 控制器" "接收 LINE Webhook 事件並轉發"
+                webhookAdapter = component "Webhook 事件轉換器" "將 LINE 事件轉換為內部格式" {
+                    tags "Adapter"
+                }
+                flexAdapter = component "Flex Message 轉換器" "將 Core 回應轉換為 LINE Flex 格式" {
+                    tags "Adapter"
+                }
+                richMenuAdapter = component "Rich Menu 同步器" "將 Rich Menu 設定轉換並同步到 LINE" {
+                    tags "Adapter"
+                }
+                lineClient = component "LINE Messaging Client" "封裝 LINE API 呼叫"
+
+                // --- LIFF 相關 ---
+                liffValidator = component "LIFF Token 驗證器" "驗證 LIFF Access Token"
+                liffAdapter = component "LIFF 請求轉換器" "將 LIFF 請求轉換為 Core API 格式" {
+                    tags "Adapter"
+                }
+                liffRespAdapter = component "LIFF 回應轉換器" "將 Core 回應轉換為 LIFF 前端格式" {
+                    tags "Adapter"
+                }
+
+                // --- 通用 ---
+                router = component "請求路由器" "依 path / event type 靜態轉發 (無業務判斷)"
+                respFormatter = component "回應格式化器" "格式化回應給不同客戶端"
             }
             
-            // ---------- Core Backend ----------
-            cb = container "Core Backend" "核心業務邏輯處理" "Python FastAPI" {
-                // AI 相關服務
-                aiResponseService = component "AI Response Service" "協調AI模型生成回覆(含對話管理、context處理)"
-                factCheckingService = component "Fact Checking Service" "事實查核功能"
-                videoAnalysisService = component "Video Analysis Service" "影片分析功能"
+            // --- Business Logic Core ---
+            core = container "Core Backend" "核心業務邏輯處理" "Python FastAPI" {
+                // --- Conversation & AI ---
+                conv = component "對話管理服務" "對話狀態管理與上下文處理"
+                aiResponse = component "AI 回應協調服務" "協調 AI 模型生成回覆 (含對話管理、context 處理)" {
+                    tags "Core" "AI"
+                }
+                factCheck = component "事實查核服務" "事實查核功能" {
+                    tags "Core" "AI"
+                }
+                videoAnalysis = component "影片分析服務" "影片分析功能" {
+                    tags "Core"
+                }
                 
-                // 語音處理
-                ttsService = component "Text to Speech Service" "文字轉語音功能"
-                asrService = component "Speech to Text Service" "語音轉文字功能"
+                // --- Speech Processing ---
+                tts = component "文字轉語音服務" "文字轉語音功能" {
+                    tags "Core" "AI"
+                }
+                asr = component "語音轉文字服務" "語音轉文字功能" {
+                    tags "Core" "AI"
+                }
                 
-                // 健康與醫療領域
-                healthDomainService = component "Health Domain Service" "健康領域相關功能(健康資訊、提醒等)"
-                hospitalResourceService = component "Hospital Resource Service" "醫院資源管理功能(掛號、查詢等)"
+                // --- Domain Services ---
+                healthDomain = component "健康領域服務" "健康相關功能 (健康資訊、提醒等)" {
+                    tags "Core"
+                }
+                hospitalSvc = component "醫院資源服務" "醫院資源管理功能 (掛號、查詢等)" {
+                    tags "Core"
+                }
                 
-                // 使用者管理
-                userManagementService = component "User Management Service" "使用者管理功能"
-                userPreferenceService = component "User Preference Service" "使用者偏好設定管理"
+                // --- User Management ---
+                userMgmt = component "使用者管理服務" "使用者管理功能" {
+                    tags "Core"
+                }
+                preference = component "偏好設定服務" "使用者偏好設定管理" {
+                    tags "Core"
+                }
                 
-                // 系統管理
-                richMenuManagementService = component "Rich Menu Management Service" "Rich Menu內容與規則管理"
+                // --- Content Processing ---
+                docProcess = component "文件處理服務" "處理 PDF、圖片等文件" {
+                    tags "Core"
+                }
+                mediaProcess = component "媒體處理服務" "處理影片、音訊等媒體" {
+                    tags "Core"
+                }
                 
-                // 對話管理
-                conversationService = component "Conversation Service" "對話狀態管理與上下文處理"
-                
-                // 內容處理
-                documentProcessingService = component "Document Processing Service" "處理PDF、圖片等文件"
-                mediaProcessingService = component "Media Processing Service" "處理影片、音訊等媒體"
+                // --- System Management ---
+                richMenuMgmt = component "Rich Menu 管理服務" "Rich Menu 內容與規則管理" {
+                    tags "Core"
+                }
             }
             
-            // ---------- Database ----------
+            // --- Storage ---
             db = container "Database" "儲存使用者資料、對話紀錄、系統設定等" "MongoDB" {
                 tags "Database"
             }
-            
-            // ---------- Cache ----------
             cache = container "Cache" "快取對話狀態、會話資料等" "Redis" {
                 tags "Cache"
             }
         }
-
+        
         // ==================== External Systems ====================
+        line = softwareSystem "LINE Platform" "提供 Messaging API 與 LIFF 服務" {
+            tags "External"
+        }
         
-        linePlatform = softwareSystem "LINE Platform" "LINE官方平台，提供Messaging API與LIFF服務" {
-            tags "External System"
-        }
-
-        taiwaneseAI = softwareSystem "台語 AI 模型服務系統" "提供台語相關 AI 能力之獨立模型服務系統" {
-            modelApi = container "Taiwanese AI Model API" "基於 TAIDE Gemma 3 的台語大型語言模型與語音服務 API" "Python FastAPI" {
-                llmService = component "Taiwanese LLM Service" "使用 TAIDE Gemma 3 產生台語文字回覆"
-                ttsService = component "Taiwanese TTS Service" "將台語文字轉換為語音回覆（TTS）"
-                asrService = component "Taiwanese ASR Service" "使用Breeze-ASR-25將台語語音轉換為文字（ASR）"
-                modelManager = component "Model Manager" "負責模型載入、版本控管與資源管理"
+        twAI = softwareSystem "台語 AI 模型服務系統" "提供台語相關 AI 能力" {
+            twApi = container "台語模型 API" "基於 TAIDE Gemma 3 的台語 LLM 與語音服務" "Python FastAPI" {
+                llm = component "台語 LLM 服務" "產生台語文字回覆" {
+                    tags "AI"
+                }
+                tts = component "台語 TTS 服務" "文字轉台語語音" {
+                    tags "AI"
+                }
+                asr = component "台語 ASR 服務" "台語語音轉文字 (Breeze-ASR-25)" {
+                    tags "AI"
+                }
+                mgr = component "模型管理器" "模型載入、版本控制與資源管理"
             }
-            tags "External System"
+            tags "External"
         }
-
-        mcpServer = softwareSystem "MCP Server" "提供外部MCP Workflow服務" "n8n" {
-            mcpApi = container "MCP API" "與MCP Workflow進行互動的API" {
-                workflowManager = component "Workflow Manager" "管理MCP工作流程"
-                ragWorkflow = component "RAG Workflow" "負責處理RAG相關工作流程"
-                dataProcessingWorkflow = component "Data Processing Workflow" "負責處理資料處理相關工作流程"
-                documentProcessingWorkflow = component "Document Processing Workflow" "負責處理文件處理相關工作流程"
-                videoProcessingWorkflow = component "Video Processing Workflow" "負責處理影片處理相關工作流程"
-                audioProcessingWorkflow = component "Audio Processing Workflow" "負責處理音訊處理相關工作流程"
-                ocrWorkflow = component "OCR Workflow" "負責處理光學字元辨識相關工作流程"
+        
+        mcp = softwareSystem "MCP Server" "提供外部 MCP Workflow 服務" {
+            mcpApi = container "MCP API" "與 MCP Workflow 互動" {
+                wfMgr = component "Workflow 管理器" "管理 MCP 工作流程"
+                rag = component "RAG Workflow" "處理 RAG 相關工作流程" {
+                    tags "Async"
+                }
+                dataWf = component "資料處理 Workflow" "處理資料驗證等" {
+                    tags "Async"
+                }
+                docWf = component "文件處理 Workflow" "處理文件相關" {
+                    tags "Async"
+                }
+                videoWf = component "影片處理 Workflow" "處理影片相關" {
+                    tags "Async"
+                }
+                audioWf = component "音訊處理 Workflow" "處理音訊相關" {
+                    tags "Async"
+                }
+                ocrWf = component "OCR Workflow" "光學字元辨識" {
+                    tags "Async"
+                }
             }
-            tags "External System"
+            tags "External"
         }
-
+        
         // ==================== Context Level Relationships ====================
-        user -> linePlatform "透過LINE App與系統互動(傳送訊息、開啟LIFF)"
+        user -> line "透過 LINE App 互動 (傳送訊息、開啟 LIFF)"
         user -> care.liff "使用醫療及健康相關功能"
+        line -> care.bff "發送 Webhook 事件 (訊息、追蹤等)"
+        care.bff -> line "發送訊息、更新 Rich Menu 等"
         
-        linePlatform -> care.bff "發送Webhook事件(訊息、追蹤、取消追蹤等)"
-        care.bff -> linePlatform "發送訊息、更新Rich Menu等"
-        care.liff -> care.bff "呼叫API獲取資料或執行操作"
-
         // ==================== Container Level Relationships ====================
+        care.liff -> care.bff "呼叫 API (使用者資料、醫療服務等)" "HTTPS/JSON" {
+            tags "Sync"
+        }
+        care.bff -> care.core "轉發業務邏輯請求" "HTTPS/JSON" {
+            tags "Sync"
+        }
+        care.core -> care.db "讀寫資料" "MongoDB Protocol" {
+            tags "Sync"
+        }
+        care.core -> care.cache "快取對話狀態、查詢結果等" "Redis Protocol" {
+            tags "Sync"
+        }
+        care.core -> twAI.twApi "調用台語 AI 模型" "HTTPS/JSON" {
+            tags "Sync"
+        }
+        care.core -> mcp.mcpApi "調用 MCP 工作流程" "HTTPS/JSON" {
+            tags "Async"
+        }
         
-        // LIFF to BFF
-        care.liff -> care.bff "HTTPS/JSON" "呼叫API(使用者資料、醫療服務、健康資訊等)"
-        
-        // BFF to Core Backend
-        care.bff -> care.cb "HTTPS/JSON" "轉發業務邏輯請求"
-        
-        // Core Backend to Database & Cache
-        care.cb -> care.db "讀寫資料" "MongoDB Protocol"
-        care.bff -> care.cache "僅儲存技術性會話資料（token / nonce / retry），不含業務狀態" "Redis Protocol"
-        care.cb -> care.cache "快取查詢結果" "Redis Protocol"
-        
-        // Core Backend to External Systems
-        care.cb -> taiwaneseAI.modelApi "調用台語AI模型" "HTTPS/JSON"
-        care.cb -> mcpServer.mcpApi "調用MCP工作流程" "HTTPS/JSON"
-
         // ==================== Component Level Relationships ====================
+        // --- LIFF to BFF ---
+        care.liff.login -> care.bff.liffAdapter "驗證 LINE 登入" {
+            tags "Sync"
+        }
+        care.liff.profile -> care.bff.liffAdapter "獲取/更新使用者資料" {
+            tags "Sync"
+        }
+        care.liff.hospitalSvc -> care.bff.liffAdapter "醫療服務請求" {
+            tags "Sync"
+        }
+        care.liff.healthSvc -> care.bff.liffAdapter "健康服務請求" {
+            tags "Sync"
+        }
+        care.bff.liffAdapter -> care.bff.liffValidator "驗證 Token" {
+            tags "Sync"
+        }
+        care.bff.liffValidator -> care.cache "檢查 Token 有效性" {
+            tags "Sync"
+        }
+        care.bff.liffAdapter -> care.bff.router "路由請求" {
+            tags "Sync"
+        }
         
-        // --- LIFF Components to BFF ---
-        care.liff.loginComponent -> care.bff.liffRequestAdapter "驗證LINE登入"
-        care.liff.userInfoComponent -> care.bff.liffRequestAdapter "獲取/更新使用者資料"
-        care.liff.hospitalServiceComponent -> care.bff.liffRequestAdapter "醫療服務請求"
-        care.liff.healthServiceComponent -> care.bff.liffRequestAdapter "健康服務請求"
+        // --- BFF Router to Core ---
+        care.bff.router -> care.core.userMgmt "使用者相關" {
+            tags "Sync"
+        }
+        care.bff.router -> care.core.preference "偏好設定" {
+            tags "Sync"
+        }
+        care.bff.router -> care.core.hospitalSvc "醫療服務" {
+            tags "Sync"
+        }
+        care.bff.router -> care.core.healthDomain "健康服務" {
+            tags "Sync"
+        }
+        care.bff.router -> care.core.richMenuMgmt "Rich Menu 管理" {
+            tags "Sync"
+        }
         
-        // --- BFF LIFF Flow (只做轉換，不處理邏輯) ---
-        care.bff.liffRequestAdapter -> care.bff.liffSessionValidator "驗證LIFF Access Token"
-        care.bff.liffSessionValidator -> care.cache "檢查Token有效性"
-        care.bff.liffRequestAdapter -> care.bff.requestRouter "路由到對應服務"
+        // --- Core Response to BFF (LIFF Flow) ---
+        care.core.userMgmt -> care.bff.liffRespAdapter "返回資料" {
+            tags "Sync"
+        }
+        care.core.preference -> care.bff.liffRespAdapter "返回設定" {
+            tags "Sync"
+        }
+        care.core.hospitalSvc -> care.bff.liffRespAdapter "返回醫療資訊" {
+            tags "Sync"
+        }
+        care.core.healthDomain -> care.bff.liffRespAdapter "返回健康資訊" {
+            tags "Sync"
+        }
+        care.core.richMenuMgmt -> care.bff.liffRespAdapter "返回 Rich Menu" {
+            tags "Sync"
+        }
+        care.bff.liffRespAdapter -> care.bff.respFormatter "格式化" {
+            tags "Sync"
+        }
+        care.bff.respFormatter -> care.liff "返回 LIFF" {
+            tags "Sync"
+        }
         
-        // --- BFF Request Router to Core Backend ---
-        care.bff.requestRouter -> care.cb.userManagementService "使用者相關請求"
-        care.bff.requestRouter -> care.cb.userPreferenceService "使用者偏好請求"
-        care.bff.requestRouter -> care.cb.hospitalResourceService "醫療服務請求"
-        care.bff.requestRouter -> care.cb.healthDomainService "健康服務請求"
-        care.bff.requestRouter -> care.cb.richMenuManagementService "Rich Menu管理請求"
+        // --- BFF Webhook Flow ---
+        line -> care.bff.webhookCtrl "發送事件" {
+            tags "Async"
+        }
+        care.bff.webhookCtrl -> care.bff.webhookAdapter "轉換格式" {
+            tags "Sync"
+        }
+        care.bff.webhookAdapter -> care.bff.router "路由事件" {
+            tags "Sync"
+        }
         
-        // --- BFF Response Flow ---
-        care.cb.userManagementService -> care.bff.liffResponseAdapter "返回使用者資料"
-        care.cb.userPreferenceService -> care.bff.liffResponseAdapter "返回偏好設定"
-        care.cb.hospitalResourceService -> care.bff.liffResponseAdapter "返回醫療資訊"
-        care.cb.healthDomainService -> care.bff.liffResponseAdapter "返回健康資訊"
-        care.cb.richMenuManagementService -> care.bff.liffResponseAdapter "返回Rich Menu設定"
-        care.bff.liffResponseAdapter -> care.bff.responseFormatter "格式化回應"
+        // --- Webhook Router to Core ---
+        care.bff.router -> care.core.conv "文字/圖片訊息" {
+            tags "Sync"
+        }
+        care.bff.router -> care.core.videoAnalysis "影片訊息" {
+            tags "Sync"
+        }
+        care.bff.router -> care.core.docProcess "文件訊息" {
+            tags "Sync"
+        }
+        care.bff.router -> care.core.asr "語音訊息" {
+            tags "Sync"
+        }
+        care.bff.router -> care.core.userMgmt "追蹤/取消追蹤" {
+            tags "Sync"
+        }
         
-        // --- BFF Webhook Flow (只做事件轉換) ---
-        linePlatform -> care.bff.webhookController "發送Webhook事件"
-        care.bff.webhookController -> care.bff.webhookEventAdapter "轉換事件格式"
-        care.bff.webhookEventAdapter -> care.bff.requestRouter "路由事件"
+        // --- Core Response to BFF (Webhook Flow) ---
+        care.core.conv -> care.bff.flexAdapter "返回對話" {
+            tags "Sync"
+        }
+        care.core.videoAnalysis -> care.bff.flexAdapter "返回分析" {
+            tags "Sync"
+        }
+        care.core.docProcess -> care.bff.flexAdapter "返回處理結果" {
+            tags "Sync"
+        }
+        care.core.asr -> care.bff.flexAdapter "返回轉文字" {
+            tags "Sync"
+        }
+        care.bff.flexAdapter -> care.bff.lineClient "傳送 Flex" {
+            tags "Sync"
+        }
+        care.bff.lineClient -> line "推送訊息" {
+            tags "Async"
+        }
         
-        // --- Webhook Router to Core Backend Services ---
-        care.bff.requestRouter -> care.cb.conversationService "文字/圖片訊息" "處理一般對話"
-        care.bff.requestRouter -> care.cb.videoAnalysisService "影片訊息"
-        care.bff.requestRouter -> care.cb.documentProcessingService "文件訊息"
-        care.bff.requestRouter -> care.cb.asrService "語音訊息"
-        care.bff.requestRouter -> care.cb.userManagementService "追蹤/取消追蹤事件"
+        // --- Rich Menu Sync ---
+        care.core.richMenuMgmt -> care.bff.richMenuAdapter "設定變更通知" {
+            tags "Async"
+        }
+        care.bff.richMenuAdapter -> care.bff.lineClient "同步到 LINE" {
+            tags "Sync"
+        }
+        care.bff.lineClient -> line "更新 Rich Menu" {
+            tags "Async"
+        }
         
-        // --- Core Backend Response to BFF (轉換為LINE格式) ---
-        care.cb.conversationService -> care.bff.flexMessageAdapter "返回對話回應"
-        care.cb.videoAnalysisService -> care.bff.flexMessageAdapter "返回影片分析結果"
-        care.cb.documentProcessingService -> care.bff.flexMessageAdapter "返回文件處理結果"
-        care.cb.asrService -> care.bff.flexMessageAdapter "返回語音轉文字結果"
+        // --- Core Internal: Conversation Flow ---
+        care.core.conv -> care.cache "讀寫對話狀態" {
+            tags "Sync"
+        }
+        care.core.conv -> care.core.preference "獲取語言偏好" {
+            tags "Sync"
+        }
+        care.core.conv -> care.core.aiResponse "請求 AI 生成" {
+            tags "Sync"
+        }
+        care.core.conv -> care.core.factCheck "需查核時" {
+            tags "Sync"
+        }
+        care.core.conv -> care.db "記錄對話歷史" {
+            tags "Sync"
+        }
         
-        // --- BFF to LINE Platform ---
-        care.bff.flexMessageAdapter -> care.bff.lineMessageClient "傳送Flex Message"
-        care.bff.lineMessageClient -> linePlatform "推送訊息"
+        // --- Core Internal: AI Response Flow ---
+        care.core.aiResponse -> care.core.preference "獲取 AI 偏好" {
+            tags "Sync"
+        }
+        care.core.aiResponse -> care.core.tts "需語音時" {
+            tags "Sync"
+        }
         
-        // --- Rich Menu Sync Flow ---
-        care.cb.richMenuManagementService -> care.bff.richMenuAdapter "Rich Menu設定變更通知"
-        care.bff.richMenuAdapter -> care.bff.lineMessageClient "同步Rich Menu到LINE"
-        care.bff.lineMessageClient -> linePlatform "更新Rich Menu"
+        // --- Core Internal: Fact Checking ---
+        care.core.factCheck -> care.core.aiResponse "修正回覆" {
+            tags "Sync"
+        }
         
-        // --- Core Backend: Conversation Service Internal Flow ---
-        care.cb.conversationService -> care.cache "讀寫對話狀態"
-        care.cb.conversationService -> care.cb.userPreferenceService "獲取使用者語言偏好"
-        care.cb.conversationService -> care.cb.aiResponseService "請求AI生成回覆"
-        care.cb.conversationService -> care.cb.factCheckingService "需要事實查核時"
+        // --- Core Internal: Content Processing ---
+        care.core.videoAnalysis -> care.core.mediaProcess "處理影片" {
+            tags "Sync"
+        }
+        care.core.docProcess -> care.core.mediaProcess "處理文件" {
+            tags "Sync"
+        }
         
-        // --- Core Backend: AI Response Service Flow ---
-        care.cb.aiResponseService -> care.cb.userPreferenceService "獲取使用者AI偏好(風格、詳細度等)"
-        care.cb.aiResponseService -> care.cb.ttsService "需要語音回覆時"
-        care.cb.aiResponseService -> care.db "記錄對話歷史"
+        // --- Core to Storage ---
+        care.core.userMgmt -> care.db "CRUD 使用者資料" {
+            tags "Sync"
+        }
+        care.core.preference -> care.db "CRUD 偏好" {
+            tags "Sync"
+        }
+        care.core.healthDomain -> care.db "讀健康資訊、寫紀錄" {
+            tags "Sync"
+        }
+        care.core.hospitalSvc -> care.db "讀醫院資源" {
+            tags "Sync"
+        }
+        care.core.richMenuMgmt -> care.db "存取 Rich Menu 設定" {
+            tags "Sync"
+        }
+        care.core.aiResponse -> care.cache "快取回覆模板" {
+            tags "Sync"
+        }
         
-        // --- Core Backend: Fact Checking Flow ---
-        care.cb.factCheckingService -> care.cb.aiResponseService "查核後修正回覆"
+        // --- Core to External: Taiwanese AI ---
+        care.core.aiResponse -> twAI.twApi.llm "台語文字生成" {
+            tags "Sync"
+        }
+        care.core.tts -> twAI.twApi.tts "台語 TTS" {
+            tags "Sync"
+        }
+        care.core.asr -> twAI.twApi.asr "台語 ASR" {
+            tags "Sync"
+        }
+        twAI.twApi.llm -> twAI.twApi.mgr "載入 LLM" {
+            tags "Sync"
+        }
+        twAI.twApi.tts -> twAI.twApi.mgr "載入 TTS" {
+            tags "Sync"
+        }
+        twAI.twApi.asr -> twAI.twApi.mgr "載入 ASR" {
+            tags "Sync"
+        }
         
-        // --- Core Backend: Video/Document Processing ---
-        care.cb.videoAnalysisService -> care.cb.mediaProcessingService "處理影片"
-        care.cb.documentProcessingService -> care.cb.mediaProcessingService "處理文件"
-        
-        // --- Core Backend: Rich Menu ---
-        care.cb.richMenuManagementService -> care.db "存取Rich Menu設定"
-        
-        // --- Core Backend to Database ---
-        care.cb.userManagementService -> care.db "CRUD使用者資料"
-        care.cb.userPreferenceService -> care.db "CRUD使用者偏好"
-        care.cb.healthDomainService -> care.db "讀取健康資訊、寫入健康紀錄"
-        care.cb.hospitalResourceService -> care.db "讀取醫院資源資料"
-        care.cb.conversationService -> care.db "記錄完整對話歷史"
-        
-        // --- Core Backend to Cache ---
-        care.cb.conversationService -> care.cache "管理對話狀態(當前context、步驟等)"
-        care.cb.aiResponseService -> care.cache "快取常用回覆模板"
-        
-        // --- Core Backend to External Systems ---
-        care.cb.aiResponseService -> taiwaneseAI.modelApi.llmService "請求台語文字生成"
-        care.cb.ttsService -> taiwaneseAI.modelApi.ttsService "請求台語TTS"
-        care.cb.asrService -> taiwaneseAI.modelApi.asrService "請求台語ASR"
-        
-        care.cb.aiResponseService -> mcpServer.mcpApi.ragWorkflow "RAG查詢醫療知識"
-        care.cb.documentProcessingService -> mcpServer.mcpApi.documentProcessingWorkflow "文件處理"
-        care.cb.documentProcessingService -> mcpServer.mcpApi.ocrWorkflow "OCR識別"
-        care.cb.mediaProcessingService -> mcpServer.mcpApi.videoProcessingWorkflow "影片處理"
-        care.cb.mediaProcessingService -> mcpServer.mcpApi.audioProcessingWorkflow "音訊處理"
-        care.cb.factCheckingService -> mcpServer.mcpApi.dataProcessingWorkflow "資料驗證"
-        
-        // --- Taiwanese AI Internal ---
-        taiwaneseAI.modelApi.llmService -> taiwaneseAI.modelApi.modelManager "載入台語LLM"
-        taiwaneseAI.modelApi.ttsService -> taiwaneseAI.modelApi.modelManager "載入TTS模型"
-        taiwaneseAI.modelApi.asrService -> taiwaneseAI.modelApi.modelManager "載入ASR模型"
-        
-        // --- MCP Internal ---
-        mcpServer.mcpApi.ragWorkflow -> mcpServer.mcpApi.workflowManager "執行工作流程"
-        mcpServer.mcpApi.documentProcessingWorkflow -> mcpServer.mcpApi.workflowManager "執行工作流程"
-        mcpServer.mcpApi.videoProcessingWorkflow -> mcpServer.mcpApi.workflowManager "執行工作流程"
-        mcpServer.mcpApi.audioProcessingWorkflow -> mcpServer.mcpApi.workflowManager "執行工作流程"
-        mcpServer.mcpApi.ocrWorkflow -> mcpServer.mcpApi.workflowManager "執行工作流程"
-        mcpServer.mcpApi.dataProcessingWorkflow -> mcpServer.mcpApi.workflowManager "執行工作流程"
+        // --- Core to External: MCP Workflows (Async) ---
+        care.core.aiResponse -> mcp.mcpApi.rag "RAG 醫療知識" {
+            tags "Async"
+        }
+        care.core.docProcess -> mcp.mcpApi.docWf "文件處理" {
+            tags "Async"
+        }
+        care.core.docProcess -> mcp.mcpApi.ocrWf "OCR 識別" {
+            tags "Async"
+        }
+        care.core.mediaProcess -> mcp.mcpApi.videoWf "影片處理" {
+            tags "Async"
+        }
+        care.core.mediaProcess -> mcp.mcpApi.audioWf "音訊處理" {
+            tags "Async"
+        }
+        care.core.factCheck -> mcp.mcpApi.dataWf "資料驗證" {
+            tags "Async"
+        }
+        mcp.mcpApi.rag -> mcp.mcpApi.wfMgr "執行" {
+            tags "Sync"
+        }
+        mcp.mcpApi.docWf -> mcp.mcpApi.wfMgr "執行" {
+            tags "Sync"
+        }
+        mcp.mcpApi.videoWf -> mcp.mcpApi.wfMgr "執行" {
+            tags "Sync"
+        }
+        mcp.mcpApi.audioWf -> mcp.mcpApi.wfMgr "執行" {
+            tags "Sync"
+        }
+        mcp.mcpApi.ocrWf -> mcp.mcpApi.wfMgr "執行" {
+            tags "Sync"
+        }
+        mcp.mcpApi.dataWf -> mcp.mcpApi.wfMgr "執行" {
+            tags "Sync"
+        }
     }
-
+    
     views {
-        systemContext care "ContextDiagram" {
-            include user
-            include care
-            include linePlatform
-            include taiwaneseAI
-            include mcpServer
-
-            autoLayout lr
-            title "[L1] CARE – System Context"
-            description "CARE 系統與使用者及外部平台（LINE、AI、MCP）的互動關係"
-        }
-
-        container care "ContainerDiagram-Overview" {
-            include user
-            include care.liff
-            include care.bff
-            include care.cb
-            include care.db
-            include care.cache
-            include linePlatform
-            include taiwaneseAI
-            include mcpServer
-
-            autoLayout lr
-            title "[L2] CARE – Container Overview"
-            description "展示 CARE 的主要容器與責任分工（前端 / BFF / 核心後端）"
-        }
-
-        container care "ContainerDiagram-External" {
-            include care.bff
-            include care.cb
-            include taiwaneseAI
-            include mcpServer
-            include linePlatform
-
-            autoLayout lr
-            title "[L2] CARE – External Integrations"
-            description "CARE 與 LINE、台語 AI、MCP Workflow 的整合關係"
-        }
-
-        component care.bff "BFFComponentDiagram-CoreFlow" {
-            include care.bff.webhookController
-            include care.bff.webhookEventAdapter
-            include care.bff.liffRequestAdapter
-            include care.bff.liffSessionValidator
-            include care.bff.requestRouter
-            include care.bff.liffResponseAdapter
-            include care.bff.flexMessageAdapter
-            include care.bff.lineMessageClient
-
-            autoLayout lr
-            title "[L3] BFF – Message & Request Flow"
-            description "BFF 僅負責請求轉換與轉送，不包含任何商業邏輯"
-        }
-
-        component care.cb "CoreBackend-ConversationAI" {
-            include care.cb.conversationService
-            include care.cb.aiResponseService
-            include care.cb.factCheckingService
-            include care.cb.userPreferenceService
-            include care.cb.ttsService
-            include care.cb.asrService
-            include care.cache
-            include care.db
-
-            autoLayout lr
-            title "[L3] Core Backend – Conversation & AI"
-            description "核心後端中對話管理與 AI 回應的處理流程"
-        }
-
-        component care.cb "CoreBackend-HealthHospital" {
-            include care.cb.healthDomainService
-            include care.cb.hospitalResourceService
-            include care.cb.userManagementService
-            include care.cb.userPreferenceService
-            include care.db
-
-            autoLayout lr
-            title "[L3] Core Backend – Health & Hospital Domain"
-            description "健康與醫療資源相關的業務邏輯服務"
-        }
-
-
         styles {
-            /* =========================
-               People
-               ========================= */
+            // --- People ---
             element "Person" {
                 shape person
                 background #2c3e50
                 color #ffffff
                 fontSize 38
             }
-        
-            /* =========================
-               Software Systems
-               ========================= */
+            
+            // --- Software Systems ---
             element "Software System" {
                 shape roundedbox
                 background #34495e
                 color #ffffff
                 fontSize 36
             }
-        
-            element "External System" {
+            element "External" {
                 background #7f8c8d
                 color #ffffff
                 opacity 75
                 fontSize 34
             }
-        
-            /* =========================
-               Containers
-               ========================= */
+            
+            // --- Containers ---
             element "Container" {
                 shape roundedbox
                 background #5dade2
                 color #ffffff
                 fontSize 34
             }
-        
             element "Database" {
                 shape cylinder
                 background #48c9b0
                 color #000000
                 fontSize 32
             }
-        
             element "Cache" {
                 shape cylinder
                 background #f5b041
                 color #000000
                 fontSize 32
             }
-        
-            /* =========================
-               Components
-               ========================= */
+            
+            // --- Components ---
             element "Component" {
                 shape roundedbox
                 background #ecf0f1
@@ -392,19 +470,13 @@ workspace "CARE" "CARE-Clinical Assistance & Resource Engine" {
                 strokeWidth 2
                 fontSize 32
             }
-        
-            /* =========================
-               Emphasis / Key Roles
-               ========================= */
-        
-            /* 核心商業邏輯（Core Backend 內部） */
+            
+            // --- Tags ---
             element "Core" {
                 background #3498db
                 color #ffffff
                 fontSize 34
             }
-        
-            /* Adapter / Translator（BFF 專用） */
             element "Adapter" {
                 background #d6eaf8
                 color #1b4f72
@@ -412,27 +484,29 @@ workspace "CARE" "CARE-Clinical Assistance & Resource Engine" {
                 strokeWidth 2
                 fontSize 32
             }
-        
-            /* =========================
-               Relationships
-               ========================= */
+            element "AI" {
+                background #9b59b6
+                color #ffffff
+            }
+            element "Async" {
+                background #e67e22
+                color #ffffff
+            }
+            
+            // --- Relationships ---
             relationship "Relationship" {
                 color #ffffff
                 thickness 2
                 fontSize 30
             }
-        
             relationship "Sync" {
                 dashed false
                 thickness 2
             }
-        
             relationship "Async" {
                 dashed true
                 thickness 2
             }
-
         }
-
     }
 }
