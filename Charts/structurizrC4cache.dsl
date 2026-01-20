@@ -100,6 +100,9 @@ workspace "CARE" "CARE - Clinical Assistance & Resource Engine" {
             db = container "Database" "儲存使用者資料、對話紀錄、系統設定等" "MongoDB" {
                 tags "Database"
             }
+            cache = container "Cache" "快取對話狀態、會話資料等" "Redis" {
+                tags "Cache"
+            }
         }
         
         // ==================== External Systems ====================
@@ -164,6 +167,9 @@ workspace "CARE" "CARE - Clinical Assistance & Resource Engine" {
         care.core -> care.db "讀寫資料" "MongoDB Protocol" {
             tags "Sync"
         }
+        care.core -> care.cache "快取對話狀態、查詢結果等" "Redis Protocol" {
+            tags "Sync"
+        }
         care.core -> twAI.twApi "調用台語 AI 模型" "HTTPS/JSON" {
             tags "Sync"
         }
@@ -186,6 +192,9 @@ workspace "CARE" "CARE - Clinical Assistance & Resource Engine" {
             tags "Sync"
         }
         care.bff.liffAdapter -> care.bff.liffValidator "驗證 Token" {
+            tags "Sync"
+        }
+        care.bff.liffValidator -> care.cache "檢查 Token 有效性" {
             tags "Sync"
         }
         care.bff.liffAdapter -> care.bff.router "路由請求" {
@@ -292,6 +301,9 @@ workspace "CARE" "CARE - Clinical Assistance & Resource Engine" {
         }
         
         // --- Core Internal: Conversation Flow ---
+        care.core.conv -> care.cache "讀寫對話狀態" {
+            tags "Sync"
+        }
         care.core.conv -> care.core.preference "獲取語言偏好" {
             tags "Sync"
         }
@@ -340,6 +352,9 @@ workspace "CARE" "CARE - Clinical Assistance & Resource Engine" {
             tags "Sync"
         }
         care.core.richMenuMgmt -> care.db "存取 Rich Menu 設定" {
+            tags "Sync"
+        }
+        care.core.aiResponse -> care.cache "快取回覆模板" {
             tags "Sync"
         }
         
