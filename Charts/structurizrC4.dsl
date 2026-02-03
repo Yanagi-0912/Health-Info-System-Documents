@@ -31,7 +31,6 @@ workspace "CARE" "CARE - Clinical Assistance & Resource Engine" {
                 lineClient = component "LINE Messaging Client" "封裝 LINE API 呼叫"
 
                 // --- LIFF 相關 ---
-                liffValidator = component "LIFF Token 驗證器" "驗證 LIFF Access Token"
                 liffAdapter = component "LIFF 請求轉換器" "將 LIFF 請求轉換為 Core API 格式" {
                     tags "Adapter"
                 }
@@ -97,7 +96,7 @@ workspace "CARE" "CARE - Clinical Assistance & Resource Engine" {
             }
             
             // --- Storage ---
-            db = container "Database" "儲存使用者資料、對話紀錄、系統設定等" "MongoDB" {
+            db = container "Database" "儲存使用者資料、對話紀錄、系統設定等" "PostgreSQL" {
                 tags "Database"
             }
         }
@@ -161,7 +160,7 @@ workspace "CARE" "CARE - Clinical Assistance & Resource Engine" {
         care.bff -> care.core "轉發業務邏輯請求" "HTTPS/JSON" {
             tags "Sync"
         }
-        care.core -> care.db "讀寫資料" "MongoDB Protocol" {
+        care.core -> care.db "讀寫資料" "PostgreSQL Protocol" {
             tags "Sync"
         }
         care.core -> twAI.twApi "調用台語 AI 模型" "HTTPS/JSON" {
@@ -183,9 +182,6 @@ workspace "CARE" "CARE - Clinical Assistance & Resource Engine" {
             tags "Sync"
         }
         care.liff.healthSvc -> care.bff.liffAdapter "健康服務請求" {
-            tags "Sync"
-        }
-        care.bff.liffAdapter -> care.bff.liffValidator "驗證 Token" {
             tags "Sync"
         }
         care.bff.liffAdapter -> care.bff.router "路由請求" {
@@ -365,9 +361,6 @@ workspace "CARE" "CARE - Clinical Assistance & Resource Engine" {
         
         // --- Core to External: MCP Workflows (Async) ---
         care.core.aiResponse -> mcp.mcpApi.rag "RAG 醫療知識" {
-            tags "Async"
-        }
-        care.core.docProcess -> mcp.mcpApi.docWf "文件處理" {
             tags "Async"
         }
         care.core.docProcess -> mcp.mcpApi.ocrWf "OCR 識別" {

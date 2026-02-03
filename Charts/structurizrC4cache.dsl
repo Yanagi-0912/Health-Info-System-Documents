@@ -31,7 +31,6 @@ workspace "CARE" "CARE - Clinical Assistance & Resource Engine" {
                 lineClient = component "LINE Messaging Client" "封裝 LINE API 呼叫"
 
                 // --- LIFF 相關 ---
-                liffValidator = component "LIFF Token 驗證器" "驗證 LIFF Access Token"
                 liffAdapter = component "LIFF 請求轉換器" "將 LIFF 請求轉換為 Core API 格式" {
                     tags "Adapter"
                 }
@@ -189,12 +188,6 @@ workspace "CARE" "CARE - Clinical Assistance & Resource Engine" {
             tags "Sync"
         }
         care.liff.healthSvc -> care.bff.liffAdapter "健康服務請求" {
-            tags "Sync"
-        }
-        care.bff.liffAdapter -> care.bff.liffValidator "驗證 Token" {
-            tags "Sync"
-        }
-        care.bff.liffValidator -> care.cache "檢查 Token 有效性" {
             tags "Sync"
         }
         care.bff.liffAdapter -> care.bff.router "路由請求" {
