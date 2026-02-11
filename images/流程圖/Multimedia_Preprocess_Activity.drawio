@@ -1,0 +1,85 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0" version="29.3.8">
+  <diagram name="Media Processing Flow" id="0">
+    <mxGraphModel dx="1668" dy="878" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="1400" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="Start" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeWidth=2;fontColor=#333333;strokeColor=#666666;fontSize=18;" value="接收使用者上傳內容" vertex="1">
+          <mxGeometry height="70" width="260" x="540" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="CheckType" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontSize=18;" value="判斷媒體類型" vertex="1">
+          <mxGeometry height="90" width="200" x="570" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="ExtractAudio" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontSize=18;" value="提取音軌" vertex="1">
+          <mxGeometry height="60" width="200" x="250" y="190" as="geometry" />
+        </mxCell>
+        <mxCell id="FormatCheckAV" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontSize=18;" value="格式檢查&#xa;(mp4, wav, mp3)" vertex="1">
+          <mxGeometry height="90" width="220" x="240" y="290" as="geometry" />
+        </mxCell>
+        <mxCell id="ASR" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontSize=18;" value="導入台語 / 多語系 ASR 模型&#xa;Speech-to-Text" vertex="1">
+          <mxGeometry height="70" width="240" x="170" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="Transcript" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontSize=18;" value="生成逐字稿" vertex="1">
+          <mxGeometry height="60" width="200" x="210" y="520" as="geometry" />
+        </mxCell>
+        <mxCell id="FormatCheckImg" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontSize=18;" value="格式檢查&#xa;(jpg, png)" vertex="1">
+          <mxGeometry height="90" width="220" x="560" y="290" as="geometry" />
+        </mxCell>
+        <mxCell id="OCR" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontSize=18;" value="導入 OCR 光學字元辨識&#xa;Image-to-Text" vertex="1">
+          <mxGeometry height="70" width="240" x="670" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="ExtractText" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontSize=18;" value="提取圖片內文字" vertex="1">
+          <mxGeometry height="60" width="220" x="680" y="520" as="geometry" />
+        </mxCell>
+        <mxCell id="ErrorMsg" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontSize=18;" value="回傳不支援格式訊息" vertex="1">
+          <mxGeometry height="70" width="240" x="420" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="Merge" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontSize=18;" value="文字正規化與 PII 個資過濾" vertex="1">
+          <mxGeometry height="70" width="300" x="390" y="600" as="geometry" />
+        </mxCell>
+        <mxCell id="Output" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeWidth=2;fontColor=#333333;strokeColor=#666666;fontSize=18;" value="輸出結構化文本&#xa;至 RAG 事實查核模組" vertex="1">
+          <mxGeometry height="70" width="260" x="410" y="690" as="geometry" />
+        </mxCell>
+        <mxCell id="LRTbDic9AU0XmS80MRjM-1" edge="1" parent="1" source="Start" style="fillColor=#f5f5f5;strokeColor=#666666;fontSize=18;" target="CheckType">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="LRTbDic9AU0XmS80MRjM-2" edge="1" parent="1" source="CheckType" style="fillColor=#f5f5f5;strokeColor=#666666;fontSize=18;" target="ExtractAudio" value="影片 / 音訊">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="LRTbDic9AU0XmS80MRjM-3" edge="1" parent="1" source="CheckType" style="fillColor=#f5f5f5;strokeColor=#666666;fontSize=18;" target="FormatCheckImg" value="圖片">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="LRTbDic9AU0XmS80MRjM-4" edge="1" parent="1" source="ExtractAudio" style="fillColor=#f5f5f5;strokeColor=#666666;fontSize=18;" target="FormatCheckAV">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="LRTbDic9AU0XmS80MRjM-5" edge="1" parent="1" source="FormatCheckAV" style="fillColor=#f5f5f5;strokeColor=#666666;fontSize=18;" target="ASR" value="格式正確">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="LRTbDic9AU0XmS80MRjM-6" edge="1" parent="1" source="FormatCheckAV" style="fillColor=#f5f5f5;strokeColor=#666666;fontSize=18;" target="ErrorMsg" value="格式錯誤">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="LRTbDic9AU0XmS80MRjM-7" edge="1" parent="1" source="ASR" style="fillColor=#f5f5f5;strokeColor=#666666;fontSize=18;" target="Transcript">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="LRTbDic9AU0XmS80MRjM-8" edge="1" parent="1" source="FormatCheckImg" style="fillColor=#f5f5f5;strokeColor=#666666;fontSize=18;" target="OCR" value="格式正確">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="LRTbDic9AU0XmS80MRjM-9" edge="1" parent="1" source="FormatCheckImg" style="fillColor=#f5f5f5;strokeColor=#666666;fontSize=18;" target="ErrorMsg" value="格式錯誤">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="LRTbDic9AU0XmS80MRjM-10" edge="1" parent="1" source="OCR" style="fillColor=#f5f5f5;strokeColor=#666666;fontSize=18;" target="ExtractText">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="LRTbDic9AU0XmS80MRjM-11" edge="1" parent="1" source="Transcript" style="fillColor=#f5f5f5;strokeColor=#666666;fontSize=18;" target="Merge">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="LRTbDic9AU0XmS80MRjM-12" edge="1" parent="1" source="ExtractText" style="fillColor=#f5f5f5;strokeColor=#666666;fontSize=18;" target="Merge">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="LRTbDic9AU0XmS80MRjM-13" edge="1" parent="1" source="Merge" style="fillColor=#f5f5f5;strokeColor=#666666;fontSize=18;" target="Output">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

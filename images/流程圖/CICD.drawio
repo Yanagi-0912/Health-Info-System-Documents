@@ -1,0 +1,82 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0" version="29.3.8">
+  <diagram name="CARE CI_CD UML Activity" id="0">
+    <mxGraphModel dx="2026" dy="1066" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="2200" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="start" parent="1" style="ellipse;whiteSpace=wrap;html=1;strokeWidth=2;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontSize=20;" value="變更發生&#xa;Code / Prompt / Knowledge" vertex="1">
+          <mxGeometry height="90" width="400" x="500" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="git" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontSize=20;" value="版本控制&#xa;Git Repository" vertex="1">
+          <mxGeometry height="80" width="400" x="500" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="ci1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontSize=20;" value="Code CI&#xa;Lint / Unit Test / API Test" vertex="1">
+          <mxGeometry height="80" width="300" x="180" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="ci2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontSize=20;" value="AI Behavior CI&#xa;Golden QA Set / Hallucination Check" vertex="1">
+          <mxGeometry height="80" width="400" x="500" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="ci3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontSize=20;" value="Knowledge CI&#xa;Document / Metadata / Embedding Check" vertex="1">
+          <mxGeometry height="80" width="350" x="920" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="decision" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontSize=20;" value="是否通過?" vertex="1">
+          <mxGeometry height="120" width="300" x="550" y="440" as="geometry" />
+        </mxCell>
+        <mxCell id="reject" parent="1" style="ellipse;whiteSpace=wrap;html=1;strokeWidth=2;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontSize=20;" value="拒絕合併&#xa;回饋修正" vertex="1">
+          <mxGeometry height="90" width="300" x="320" y="665" as="geometry" />
+        </mxCell>
+        <mxCell id="staging" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontSize=20;" value="部署至 Staging 環境" vertex="1">
+          <mxGeometry height="80" width="300" x="770" y="560" as="geometry" />
+        </mxCell>
+        <mxCell id="human" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontSize=20;" value="人工審核&#xa;Human-in-the-loop" vertex="1">
+          <mxGeometry height="80" width="300" x="770" y="670" as="geometry" />
+        </mxCell>
+        <mxCell id="production" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontSize=20;" value="部署至 Production 環境" vertex="1">
+          <mxGeometry height="80" width="300" x="770" y="800" as="geometry" />
+        </mxCell>
+        <mxCell id="monitor" parent="1" style="ellipse;whiteSpace=wrap;html=1;strokeWidth=2;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontSize=20;" value="系統監控與&#xa;可回滾機制" vertex="1">
+          <mxGeometry height="90" width="300" x="770" y="910" as="geometry" />
+        </mxCell>
+        <mxCell id="edYEBBcf6uEewlkDoiqD-1" edge="1" parent="1" source="start" style="fillColor=#f5f5f5;strokeColor=#666666;fontSize=20;" target="git">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edYEBBcf6uEewlkDoiqD-2" edge="1" parent="1" source="git" style="fillColor=#f5f5f5;strokeColor=#666666;fontSize=20;" target="ci1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edYEBBcf6uEewlkDoiqD-3" edge="1" parent="1" source="git" style="fillColor=#f5f5f5;strokeColor=#666666;fontSize=20;" target="ci2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edYEBBcf6uEewlkDoiqD-4" edge="1" parent="1" source="git" style="fillColor=#f5f5f5;strokeColor=#666666;fontSize=20;" target="ci3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edYEBBcf6uEewlkDoiqD-5" edge="1" parent="1" source="ci1" style="fillColor=#f5f5f5;strokeColor=#666666;fontSize=20;" target="decision">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edYEBBcf6uEewlkDoiqD-6" edge="1" parent="1" source="ci2" style="fillColor=#f5f5f5;strokeColor=#666666;fontSize=20;" target="decision">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edYEBBcf6uEewlkDoiqD-7" edge="1" parent="1" source="ci3" style="fillColor=#f5f5f5;strokeColor=#666666;fontSize=20;" target="decision">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edYEBBcf6uEewlkDoiqD-8" edge="1" parent="1" source="decision" style="fillColor=#f5f5f5;strokeColor=#666666;fontSize=20;" target="reject" value="否">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edYEBBcf6uEewlkDoiqD-9" edge="1" parent="1" source="decision" style="fillColor=#f5f5f5;strokeColor=#666666;fontSize=20;" target="staging" value="是">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edYEBBcf6uEewlkDoiqD-10" edge="1" parent="1" source="staging" style="fillColor=#f5f5f5;strokeColor=#666666;fontSize=20;" target="human">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edYEBBcf6uEewlkDoiqD-11" edge="1" parent="1" source="human" style="fillColor=#f5f5f5;strokeColor=#666666;fontSize=20;" target="reject" value="未通過">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edYEBBcf6uEewlkDoiqD-12" edge="1" parent="1" source="human" style="fillColor=#f5f5f5;strokeColor=#666666;fontSize=20;" target="production" value="通過">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edYEBBcf6uEewlkDoiqD-13" edge="1" parent="1" source="production" style="fillColor=#f5f5f5;strokeColor=#666666;fontSize=20;" target="monitor">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

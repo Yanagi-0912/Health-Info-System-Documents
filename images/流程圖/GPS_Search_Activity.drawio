@@ -1,0 +1,70 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0" version="29.3.8">
+  <diagram name="GPS 附近醫療資源搜尋活動圖" id="0">
+    <mxGraphModel dx="1668" dy="878" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="1400" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="start" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontSize=18;" value="詢問使用者&#xa;是否開啟 GPS" vertex="1">
+          <mxGeometry height="60" width="200" x="480" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="gpsGet" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontSize=18;" value="透過 GPS&#xa;取得使用者位置" vertex="1">
+          <mxGeometry height="60" width="200" x="480" y="170" as="geometry" />
+        </mxCell>
+        <mxCell id="cantSearch" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontSize=18;" value="無法搜尋&#xa;附近資源" vertex="1">
+          <mxGeometry height="60" width="200" x="720" y="170" as="geometry" />
+        </mxCell>
+        <mxCell id="gpsOk" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontSize=18;" value="GPS 定位&#xa;是否成功" vertex="1">
+          <mxGeometry height="80" width="200" x="480" y="250" as="geometry" />
+        </mxCell>
+        <mxCell id="tryLocate" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontSize=18;" value="嘗試重新定位" vertex="1">
+          <mxGeometry height="60" width="200" x="240" y="360" as="geometry" />
+        </mxCell>
+        <mxCell id="searchOpenData" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontSize=18;" value="尋找政府開放資料中&#xa;的醫療院所" vertex="1">
+          <mxGeometry height="60" width="240" x="460" y="360" as="geometry" />
+        </mxCell>
+        <mxCell id="hasLegal" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontSize=18;" value="是否有合法的資料" vertex="1">
+          <mxGeometry height="80" width="200" x="480" y="440" as="geometry" />
+        </mxCell>
+        <mxCell id="noResource" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontSize=18;" value="告訴使用者&#xa;附近查無醫療院所" vertex="1">
+          <mxGeometry height="60" width="240" x="730" y="450" as="geometry" />
+        </mxCell>
+        <mxCell id="calcSort" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontSize=18;" value="計算距離&#xa;並排序" vertex="1">
+          <mxGeometry height="60" width="200" x="480" y="560" as="geometry" />
+        </mxCell>
+        <mxCell id="returnAsk" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontSize=18;" value="回傳資訊並詢問使用者&#xa;是否需要實體協助" vertex="1">
+          <mxGeometry height="70" width="280" x="440" y="640" as="geometry" />
+        </mxCell>
+        <mxCell id="mfrXucX85wW6Rl17n6ee-1" edge="1" parent="1" source="start" style="fillColor=#f5f5f5;strokeColor=#666666;fontSize=18;" target="gpsGet" value="是">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="mfrXucX85wW6Rl17n6ee-2" edge="1" parent="1" source="start" style="fillColor=#f5f5f5;strokeColor=#666666;fontSize=18;" target="cantSearch" value="否">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="mfrXucX85wW6Rl17n6ee-3" edge="1" parent="1" source="gpsGet" style="fillColor=#f5f5f5;strokeColor=#666666;fontSize=18;" target="gpsOk">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="mfrXucX85wW6Rl17n6ee-4" edge="1" parent="1" source="gpsOk" style="fillColor=#f5f5f5;strokeColor=#666666;fontSize=18;" target="searchOpenData" value="是">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="mfrXucX85wW6Rl17n6ee-5" edge="1" parent="1" source="gpsOk" style="fillColor=#f5f5f5;strokeColor=#666666;fontSize=18;" target="tryLocate" value="否">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="mfrXucX85wW6Rl17n6ee-6" edge="1" parent="1" source="tryLocate" style="fillColor=#f5f5f5;strokeColor=#666666;fontSize=18;" target="gpsOk">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="mfrXucX85wW6Rl17n6ee-7" edge="1" parent="1" source="searchOpenData" style="fillColor=#f5f5f5;strokeColor=#666666;fontSize=18;" target="hasLegal">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="mfrXucX85wW6Rl17n6ee-8" edge="1" parent="1" source="hasLegal" style="fillColor=#f5f5f5;strokeColor=#666666;fontSize=18;" target="calcSort" value="是">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="mfrXucX85wW6Rl17n6ee-9" edge="1" parent="1" source="hasLegal" style="fillColor=#f5f5f5;strokeColor=#666666;fontSize=18;" target="noResource" value="否">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="mfrXucX85wW6Rl17n6ee-10" edge="1" parent="1" source="calcSort" style="fillColor=#f5f5f5;strokeColor=#666666;fontSize=18;" target="returnAsk">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

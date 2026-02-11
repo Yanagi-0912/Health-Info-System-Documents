@@ -1,0 +1,55 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0" version="29.3.8">
+  <diagram name="Taiwanese Speech Medical Flow" id="0">
+    <mxGraphModel dx="1418" dy="746" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="2000" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="A" parent="1" style="ellipse;whiteSpace=wrap;html=1;strokeWidth=2;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontSize=20;" value="高齡使用者&#xa;台語語音輸入" vertex="1">
+          <mxGeometry height="90" width="400" x="350" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="B" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontSize=20;" value="台語 ASR" vertex="1">
+          <mxGeometry height="70" width="400" x="350" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="C" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontSize=20;" value="台語 AI&#xa;台語逐字稿 → 中文逐字稿&#xa;僅語言轉換" vertex="1">
+          <mxGeometry height="90" width="400" x="350" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="D" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontSize=20;" value="核心 Backend&#xa;RAG / 規則引擎&#xa;醫療邏輯與查核" vertex="1">
+          <mxGeometry height="90" width="400" x="350" y="380" as="geometry" />
+        </mxCell>
+        <mxCell id="E" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontSize=20;" value="安全且已查核之&#xa;回應文字" vertex="1">
+          <mxGeometry height="80" width="400" x="350" y="500" as="geometry" />
+        </mxCell>
+        <mxCell id="F" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontSize=20;" value="台語 AI&#xa;中文回應 → 台語逐字稿&#xa;長輩友善語言生成" vertex="1">
+          <mxGeometry height="90" width="400" x="350" y="610" as="geometry" />
+        </mxCell>
+        <mxCell id="G" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontSize=20;" value="台語 TTS" vertex="1">
+          <mxGeometry height="70" width="400" x="350" y="730" as="geometry" />
+        </mxCell>
+        <mxCell id="H" parent="1" style="ellipse;whiteSpace=wrap;html=1;strokeWidth=2;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontSize=20;" value="LINE 回傳&#xa;台語語音回覆" vertex="1">
+          <mxGeometry height="90" width="400" x="350" y="840" as="geometry" />
+        </mxCell>
+        <mxCell id="crQDrTMGbulzDUvKoC96-1" edge="1" parent="1" source="A" style="fillColor=#f5f5f5;strokeColor=#666666;fontSize=20;" target="B">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="crQDrTMGbulzDUvKoC96-2" edge="1" parent="1" source="B" style="fillColor=#f5f5f5;strokeColor=#666666;fontSize=20;" target="C">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="crQDrTMGbulzDUvKoC96-3" edge="1" parent="1" source="C" style="fillColor=#f5f5f5;strokeColor=#666666;fontSize=20;" target="D">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="crQDrTMGbulzDUvKoC96-4" edge="1" parent="1" source="D" style="fillColor=#f5f5f5;strokeColor=#666666;fontSize=20;" target="E">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="crQDrTMGbulzDUvKoC96-5" edge="1" parent="1" source="E" style="fillColor=#f5f5f5;strokeColor=#666666;fontSize=20;" target="F">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="crQDrTMGbulzDUvKoC96-6" edge="1" parent="1" source="F" style="fillColor=#f5f5f5;strokeColor=#666666;fontSize=20;" target="G">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="crQDrTMGbulzDUvKoC96-7" edge="1" parent="1" source="G" style="fillColor=#f5f5f5;strokeColor=#666666;fontSize=20;" target="H">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

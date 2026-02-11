@@ -1,0 +1,67 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0" version="29.3.8">
+  <diagram name="RAG Knowledge Base Construction" id="0">
+    <mxGraphModel dx="1418" dy="746" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="2000" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="A" parent="1" style="ellipse;whiteSpace=wrap;html=1;strokeWidth=2;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontSize=18;" value="資料來源蒐集&#xa;衛福部 / CDC / 臨床指引 / 藥品仿單" vertex="1">
+          <mxGeometry height="90" width="400" x="350" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="B" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontSize=18;" value="資料下載或爬取&#xa;PDF / HTML / Open Data" vertex="1">
+          <mxGeometry height="80" width="400" x="350" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="C" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontSize=18;" value="資料清洗&#xa;去除廣告 / 格式雜訊 / 重複內容" vertex="1">
+          <mxGeometry height="80" width="400" x="350" y="270" as="geometry" />
+        </mxCell>
+        <mxCell id="D" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontSize=18;" value="人工審核與校正&#xa;確保醫療內容正確性" vertex="1">
+          <mxGeometry height="80" width="400" x="350" y="380" as="geometry" />
+        </mxCell>
+        <mxCell id="E" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontSize=18;" value="結構化整理&#xa;轉換為 JSON 格式" vertex="1">
+          <mxGeometry height="80" width="400" x="350" y="490" as="geometry" />
+        </mxCell>
+        <mxCell id="F" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontSize=18;" value="文本切分 Chunking" vertex="1">
+          <mxGeometry height="80" width="400" x="350" y="600" as="geometry" />
+        </mxCell>
+        <mxCell id="G" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontSize=18;" value="Metadata 標註&#xa;疾病 / 症狀 / 來源 / 類型" vertex="1">
+          <mxGeometry height="80" width="400" x="350" y="710" as="geometry" />
+        </mxCell>
+        <mxCell id="H" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontSize=18;" value="向量化 Embedding" vertex="1">
+          <mxGeometry height="80" width="400" x="350" y="820" as="geometry" />
+        </mxCell>
+        <mxCell id="I" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontSize=18;" value="儲存至向量資料庫" vertex="1">
+          <mxGeometry height="80" width="400" x="350" y="930" as="geometry" />
+        </mxCell>
+        <mxCell id="J" parent="1" style="ellipse;whiteSpace=wrap;html=1;strokeWidth=2;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontSize=18;" value="建立索引 Indexing&#xa;供 RAG 檢索使用" vertex="1">
+          <mxGeometry height="90" width="400" x="350" y="1040" as="geometry" />
+        </mxCell>
+        <mxCell id="cRbgij1euCKoOUdT_BMw-1" edge="1" parent="1" source="A" style="fillColor=#f5f5f5;strokeColor=#666666;fontSize=18;" target="B">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cRbgij1euCKoOUdT_BMw-2" edge="1" parent="1" source="B" style="fillColor=#f5f5f5;strokeColor=#666666;fontSize=18;" target="C">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cRbgij1euCKoOUdT_BMw-3" edge="1" parent="1" source="C" style="fillColor=#f5f5f5;strokeColor=#666666;fontSize=18;" target="D">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cRbgij1euCKoOUdT_BMw-4" edge="1" parent="1" source="D" style="fillColor=#f5f5f5;strokeColor=#666666;fontSize=18;" target="E">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cRbgij1euCKoOUdT_BMw-5" edge="1" parent="1" source="E" style="fillColor=#f5f5f5;strokeColor=#666666;fontSize=18;" target="F">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cRbgij1euCKoOUdT_BMw-6" edge="1" parent="1" source="F" style="fillColor=#f5f5f5;strokeColor=#666666;fontSize=18;" target="G">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cRbgij1euCKoOUdT_BMw-7" edge="1" parent="1" source="G" style="fillColor=#f5f5f5;strokeColor=#666666;fontSize=18;" target="H">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cRbgij1euCKoOUdT_BMw-8" edge="1" parent="1" source="H" style="fillColor=#f5f5f5;strokeColor=#666666;fontSize=18;" target="I">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cRbgij1euCKoOUdT_BMw-9" edge="1" parent="1" source="I" style="fillColor=#f5f5f5;strokeColor=#666666;fontSize=18;" target="J">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

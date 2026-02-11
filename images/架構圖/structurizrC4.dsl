@@ -400,80 +400,80 @@ workspace "CARE" "CARE - Clinical Assistance & Resource Engine" {
             // --- People ---
             element "Person" {
                 shape person
-                background #2c3e50
-                color #ffffff
+                background #ecf0f1
+                color #1f2d3d
                 fontSize 38
             }
             
             // --- Software Systems ---
             element "Software System" {
                 shape roundedbox
-                background #34495e
-                color #ffffff
+                background #e6f0ff
+                color #1f2d3d
                 fontSize 36
             }
             element "External" {
-                background #7f8c8d
-                color #ffffff
-                opacity 75
+                background #f2f2f2
+                color #1f2d3d
+                opacity 100
                 fontSize 34
             }
             
             // --- Containers ---
             element "Container" {
                 shape roundedbox
-                background #5dade2
-                color #ffffff
+                background #dbe9ff
+                color #1f2d3d
                 fontSize 34
             }
             element "Database" {
                 shape cylinder
-                background #48c9b0
-                color #000000
+                background #dff5e3
+                color #1f2d3d
                 fontSize 32
             }
             element "Cache" {
                 shape cylinder
-                background #f5b041
-                color #000000
+                background #fdebd0
+                color #1f2d3d
                 fontSize 32
             }
             
             // --- Components ---
             element "Component" {
                 shape roundedbox
-                background #ecf0f1
-                color #2c3e50
-                stroke #95a5a6
+                background #ffffff
+                color #1f2d3d
+                stroke #7f8c8d
                 strokeWidth 2
                 fontSize 32
             }
             
             // --- Tags ---
             element "Core" {
-                background #3498db
-                color #ffffff
+                background #cfe2ff
+                color #1f2d3d
                 fontSize 34
             }
             element "Adapter" {
-                background #d6eaf8
-                color #1b4f72
-                stroke #5dade2
+                background #eaf4ff
+                color #1f2d3d
+                stroke #7aa6d8
                 strokeWidth 2
                 fontSize 32
             }
             element "AI" {
-                background #9b59b6
-                color #ffffff
+                background #e6d9f5
+                color #1f2d3d
             }
             element "Async" {
-                background #e67e22
-                color #ffffff
+                background #fde2c7
+                color #1f2d3d
             }
             
             // --- Relationships ---
             relationship "Relationship" {
-                color #ffffff
+                color #2c3e50
                 thickness 2
                 fontSize 30
             }
