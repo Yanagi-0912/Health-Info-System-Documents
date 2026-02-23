@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0" version="29.3.8">
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0" version="29.2.7">
   <diagram name="第 1 页" id="THzyVVU9bNA7kyUpMPmZ">
-    <mxGraphModel dx="2853" dy="1066" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1593" dy="393" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -106,7 +106,7 @@
         <mxCell id="g8dnh471KSBd2hDUdu-N-45" parent="g8dnh471KSBd2hDUdu-N-52" style="rounded=1;whiteSpace=wrap;fontStyle=0;startSize=23;fontSize=17;fontColor=default;textShadow=0;html=1;verticalAlign=middle;" value="Hospital Resource Service" vertex="1">
           <mxGeometry height="60" width="160" x="20" y="270" as="geometry" />
         </mxCell>
-        <mxCell id="g8dnh471KSBd2hDUdu-N-61" parent="g8dnh471KSBd2hDUdu-N-5" style="swimlane;startSize=20;html=1;" value="External Service" vertex="1">
+        <mxCell id="g8dnh471KSBd2hDUdu-N-61" parent="g8dnh471KSBd2hDUdu-N-5" style="swimlane;startSize=20;html=1;" value="External Service Bridge" vertex="1">
           <mxGeometry height="1050" width="240" x="740" y="20" as="geometry" />
         </mxCell>
         <mxCell id="g8dnh471KSBd2hDUdu-N-73" parent="g8dnh471KSBd2hDUdu-N-61" style="swimlane;whiteSpace=wrap;html=1;" value="台灣語言系統" vertex="1">
@@ -159,6 +159,15 @@
         </mxCell>
         <mxCell id="EtlH8zcDknWZoZd6kqV7-32" parent="EtlH8zcDknWZoZd6kqV7-15" style="strokeWidth=2;shape=mxgraph.flowchart.database;whiteSpace=wrap;fontSize=17;fontColor=default;textShadow=0;html=1;fontStyle=0;verticalAlign=bottom;" value="Health Domain and&lt;br&gt;Hospital Resource&amp;nbsp;&lt;br&gt;Database" vertex="1">
           <mxGeometry height="120" width="160" x="40" y="360" as="geometry" />
+        </mxCell>
+        <mxCell id="Z_B1GkD9VnfdRu0BMj4r-2" edge="1" parent="EtlH8zcDknWZoZd6kqV7-15" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;strokeColor=#0000CC;" target="EtlH8zcDknWZoZd6kqV7-31" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <Array as="points">
+              <mxPoint x="20" y="270" />
+            </Array>
+            <mxPoint x="20" y="420" as="sourcePoint" />
+            <mxPoint x="52.7199999999998" y="280.31999999999994" as="targetPoint" />
+          </mxGeometry>
         </mxCell>
         <mxCell id="g8dnh471KSBd2hDUdu-N-20" edge="1" parent="g8dnh471KSBd2hDUdu-N-5" source="g8dnh471KSBd2hDUdu-N-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fillColor=#0050ef;strokeColor=#001DBC;" target="g8dnh471KSBd2hDUdu-N-19" value="">
           <mxGeometry relative="1" as="geometry">
@@ -261,7 +270,7 @@
             <mxPoint x="760" y="630" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="EtlH8zcDknWZoZd6kqV7-47" edge="1" parent="g8dnh471KSBd2hDUdu-N-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fillColor=#0050ef;strokeColor=#001DBC;" value="">
+        <mxCell id="EtlH8zcDknWZoZd6kqV7-47" edge="1" parent="g8dnh471KSBd2hDUdu-N-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fillColor=#0050ef;strokeColor=#001DBC;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" target="EtlH8zcDknWZoZd6kqV7-32" value="">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="740" y="440" as="sourcePoint" />
             <mxPoint x="1000" y="440" as="targetPoint" />
